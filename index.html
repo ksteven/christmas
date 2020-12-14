@@ -17,6 +17,21 @@
     .nav-wrapper .brand-logo img {
       height: 64px;
     }
+
+    .time-wrapper {
+      justify-content: center;
+    }
+
+    .time-wrapper>div {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .time-unit {
+      text-transform: uppercase;
+      width: 100%;
+      display: block;
+    }
   </style>
 </head>
 
@@ -31,6 +46,34 @@
     <div class="section">
       <div class="row">
         <div class="col s12 m8">
+          <h2>Sunday December 20th, 2020</h2>
+          <div class="card">
+            <div class="card-content">
+              <div id="clock" class="time-wrapper">
+                <div class="row">
+                  <h5>
+                    <div class="col s3">
+                      <span class="time-unit">
+                        D<span class="hide-on-small-only">ays</span> </span>
+                      <span id="days">00</span>
+                    </div>
+                    <div class="col s3">
+                      <span class="time-unit">H<span class="hide-on-small-only">ours</span></span>
+                      <span id="hours">00</span>
+                    </div>
+                    <div class="col s3">
+                      <span class="time-unit">M<span class="hide-on-small-only">ins</span></span>
+                      <span id="minutes">00</span>
+                    </div>
+                    <div class="col s3">
+                      <span class="time-unit">S<span class="hide-on-small-only">econds</span></span>
+                      <span id="seconds">00</span>
+                    </div>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card">
             <div class="card-content">
               <span class="card-title"> Links
@@ -42,12 +85,6 @@
                   <img src="https://i.imgur.com/wPWu8pJ.png" alt="" class="circle">
                   <span class="title">Family Feud Survey</span>
                   <p>Please keep answers confidential!</p>
-                </a>
-                <a href="https://doodle.com/poll/erfkn75y334ndbdf"
-                  class="collection-item avatar blue-text text-darken-2">
-                  <img src="https://i.imgur.com/MZk9sR8.png" alt="" class="circle">
-                  <span class="title">Schedule</span>
-                  <p>Pick Dates you will be available</p>
                 </a>
               </div>
             </div>
@@ -103,7 +140,51 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+
+  <script>
+    window.onload = function (e) {
+
+      const eventDateProvided = '2020-12-20T15:30:00-05:00';
+      const convertEventDate = moment.utc(eventDateProvided).format('DD-MM-YYYY HH:mm:ss');
+
+      var $clock = $('#clock'),
+        eventTime = moment(convertEventDate, 'DD-MM-YYYY HH:mm:ss'),
+        interval = 1000,
+        $d = document.querySelector('#days'),
+        $h = document.querySelector('#hours'),
+        $m = document.querySelector('#minutes');
+      $s = document.querySelector('#seconds');
+
+      setInterval(function () {
+
+        var currentTime = moment(),
+          diffDays = eventTime.diff(currentTime, 'days'),
+          diffHours = eventTime.diff(currentTime, 'hours'),
+          diffMinutes = eventTime.diff(currentTime, 'minutes'),
+          diffSeconds = eventTime.diff(currentTime, 'seconds');
+
+        var d = diffDays,
+          h = diffHours - (diffDays * 24),
+          m = diffMinutes - (diffHours * 60),
+          s = diffSeconds - (diffMinutes * 60);
+
+        console.log(eventTime);
+
+        d = $.trim(d).length === 1 ? '0' + d : d;
+        h = $.trim(h).length === 1 ? '0' + h : h;
+        m = $.trim(m).length === 1 ? '0' + m : m;
+        s = $.trim(s).length === 1 ? '0' + s : s;
+
+        // show how many hours, minutes and seconds are left
+        $d.textContent = d;
+        $h.textContent = h;
+        $m.textContent = m;
+        $s.textContent = s;
+
+      }, interval);
+    };
+  </script>
 
 </body>
 
